@@ -1,0 +1,52 @@
+CREATE TABLE rates
+(
+id INT(4) AUTO_INCREMENT NOT NULL,
+provider_id INT(2) NOT NULL DEFAULT 0,
+rate1month DECIMAL(7,5),
+effective VARCHAR(50),
+updated_at DATE,
+files_id INT(4),
+PRIMARY KEY (id),
+INDEX date_provider (updated_at, provider_id)
+);
+
+CREATE TABLE providers
+(
+id INT(2) AUTO_INCREMENT NOT NULL,
+provider VARCHAR(30) NOT NULL DEFAULT 0,
+tag VARCHAR(3),
+url VARCHAR(120),
+enabled TINYINT NOT NULL DEFAULT 0,
+PRIMARY KEY (id)
+);
+
+CREATE TABLE files
+(
+id INT(4) AUTO_INCREMENT NOT NULL,
+filepath VARCHAR(100),
+PRIMARY KEY (id),
+UNIQUE KEY filepath (filepath)
+);
+
+CREATE TABLE recipients
+(
+id INT(2) AUTO_INCREMENT NOT NULL,
+email VARCHAR(50),
+enabled TINYINT NOT NULL DEFAULT 0,
+PRIMARY KEY (id),
+UNIQUE KEY (email)
+);
+
+
+INSERT INTO providers (provider, tag, url, enabled)
+VALUES
+('Wall Street Journal', 'wsj', 'http://www.wsj.com/mdc/public/page/2_3020-libor.html', 1),
+('Home Finance', 'hf', 'https://www.homefinance.nl/english/international-interest-rates/libor/usdollar/libor-rates-1-month-usd.asp', 0),
+('Global Rates', 'gr', 'http://www.global-rates.com/interest-rates/libor/american-dollar/usd-libor-interest-rate-1-month.aspx', 0)
+;
+
+INSERT INTO recipients
+(email, enabled)
+VALUES
+("dc108349@gmail.com", 1),
+("dchristiansen@gpgadvisers.com", 1);
