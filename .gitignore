@@ -1,0 +1,10 @@
+*.pyc
+*.cache
+*.zip
+*.jpeg
+*.docx
+test/
+
+
+# OS X
+.DS_Store
