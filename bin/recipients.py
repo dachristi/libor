@@ -45,7 +45,7 @@ class Mail(object):
             raise Exception('Problem reading data')
         email_body = ("\n\n\n\nHello,\n\n"
                       "The most recently published 1-month LIBOR rate is:\n\n"
-                       "LIBOR Rate: $%s\n"
+                       "LIBOR Rate: %s%%\n"
                        "%s*\n\n"
                        "The source for this information is %s and was obtained "
                        "on %s.\n\n"
