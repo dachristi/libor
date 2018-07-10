@@ -138,7 +138,7 @@ def data_providers():
     cursor.execute(cmd)
     x = cursor.fetchall()
     for item in x:
-        provider = Provider(item['id'], item['provider'], item['tag'], item['url'])
+        provider = Provider(item['id'], item['provider'], item['tag'], str(item['url']))
         providers.append(provider)
     return providers
 
