@@ -31,7 +31,7 @@ class Mail(object):
         cmd = '''
                 SELECT rate1month, effective, updated_at
                 FROM rates
-                WHERE provider_id = 1
+                WHERE provider_id = 3
                 ORDER BY updated_at DESC
                 LIMIT 1;
                 '''

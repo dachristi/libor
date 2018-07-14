@@ -34,7 +34,7 @@ class Libor(object):
         elif self.provider == 'hf':
             self.rate = self.parse_hf(self)
         elif self.provider == 'gr':
-            self.rate = self.parse_gr(self)
+            self.label, self.rate, self.effective_date = self.parse_gr()
         else:
             raise Exception('Invalid provider given as arguement.')
 
@@ -77,6 +77,39 @@ class Libor(object):
 
         label = tables[2].findAll('tr')[6].findAll('td')[0].text
         rate = tables[2].findAll('tr')[6].findAll('td')[1].text
+
+        return (label, rate, effective_date)
+
+    def parse_gr(self):
+        '''
+        Custom parser for global-rates.com webpage:
+        http://www.global-rates.com/interest-rates/libor/american-dollar/usd-libor-interest-rate-1-month.aspx
+        '''
+        with open(self.filepath, 'r') as f:
+            text = f.read()
+        soup = BeautifulSoup(text, "lxml")
+
+        tables = soup.findAll('table')
+        rate_tables = []
+        for table in tables:
+            header = table.find('tr', {'class': 'tableheader'})
+            if not header:
+                continue
+            if 'Current interest rates' in header.text:
+                rate_tables.append(table)
+        table = rate_tables[-1]  # tables are embedded and the last one represents the inner-most table
+
+        rows = table.findAll('tr')
+
+        if not re.search(r'(\w+\s\d{1,2}\s\d{4})', rows[1].text):
+            raise Exception('Cannot find the effective date in page')
+        effective_date = ('Rates shown are effective %s'
+                          % re.search(r'(\w+\s\d{1,2}\s\d{4})', rows[1].text).group(1).capitalize())
+
+        if not re.search(r'(\d+\.\d+)', rows[1].text):
+            raise Exception('Cannot find the effecive date in parsed object')
+        rate = re.search(r'(\d+\.\d+)', rows[1].text).group(1)
+        label = 'Libor 1 Month'
 
         return (label, rate, effective_date)
 
@@ -211,7 +244,16 @@ if __name__ == '__main__':
 2. process each file
 
 
+good_tables = []
+for table in tables:
+    header = table.find('tr', {'class': 'tableheader'})
+    if not header:
+        continue
+    if 'Current interest rates' in header.text:
+        good_tables.append(table)
+        print header
 
+len(good_tables)
 
 
 '''
