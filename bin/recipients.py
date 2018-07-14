@@ -39,24 +39,46 @@ class Mail(object):
         x = cursor.fetchall()
         if x:
             rate = x[0]['rate1month']
+
+            # Format mysql date into python datetime object
             effective_date = x[0]['effective']
-            updated_at = x[0]['updated_at']
+            #e_year, e_month, e_day = map(int, effective_date.split('-'))
+            #effective_date = datetime(e_year, e_month, e_day).strftime('%d/%m/%Y')
+            #e_year, e_month, e_day = map(int, effective_date.split('-'))
+            #updated_at = datetime(*map(int, x[0]['updated_at'].split('-'))).strftime('%d/%m/%Y')
+
+            updated_at = x[0]['updated_at'].strftime('%-m/%-d/%Y')
         else:
             raise Exception('Problem reading data')
-        email_body = ("\n\n\n\nHello,\n\n"
-                      "The most recently published 1-month LIBOR rate is:\n\n"
-                       "LIBOR Rate: %s%%\n"
-                       "%s*\n\n"
-                       "The source for this information is %s and was obtained "
-                       "on %s.\n\n"
-                       "* Obtained directly from source website.\n\n\n\n"
-                       "Best,\nLibor Rate Bot\n\n\n\n" % (
-                                  rate,
-                                   effective_date,
-                                   'http://www.wsj.com/mdc/public/page/2_3020-libor.html',
-                                   updated_at))
+        email_body = '<html>\n'
+        email_body += '<body>\n'
+        email_body += '<p>'
+        #               "LIBOR Rate: %s%%\n"
+        email_body += ("<br>\n<br>\n"
+                       "Hello,"
+                       "<br>\n<br>\n"
+                       "The most recently published 1-month LIBOR rate is: "
 
-        with open('/home/libor_rate/bin/email.txt', 'w') as f:
+                       "<b>%s%%</b>\n<br>\n<br>\n"
+
+                       "%s*\n<br>\n<br>\n"
+                       "The source for this information is %s and was obtained "
+                       "on %s.\n<br>\n<br>\n<br>\n<br>\n"
+                       "Cheers,\n<br>\n"
+                       "Libor Rate Bot\n<br>\n<br>\n<br>\n<br>\n"
+                       #"* Obtained directly from source website.\n\n\n\n"
+
+                       "</p>\n"
+                       "</body>\n"
+                       "</html>\n"
+                       % (
+                       rate,
+                       effective_date,
+                       'http://www.wsj.com/mdc/public/page/2_3020-libor.html',
+                       updated_at))
+
+
+        with open('/home/libor_rate/bin/email.html', 'w') as f:
             f.write(email_body)
         print '%s Email drafted successfully' % str(datetime.now())
 
