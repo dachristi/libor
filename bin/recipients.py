@@ -35,6 +35,19 @@ class Mail(object):
                 ORDER BY updated_at DESC
                 LIMIT 1;
                 '''
+        cmd1 = '''
+                SELECT url
+                FROM providers
+                WHERE id = 3;
+                '''
+        # url
+        cursor.execute(cmd1)
+        x = cursor.fetchall()
+        if x:
+            url = x[0]['url']
+        else:
+            raise exception('Cannot find the url for provider')
+        # rate
         cursor.execute(cmd)
         x = cursor.fetchall()
         if x:
@@ -59,9 +72,9 @@ class Mail(object):
                        "<br>\n<br>\n"
                        "The most recently published 1-month LIBOR rate is: "
 
-                       "<b>%s%%</b>\n<br>\n<br>\n"
+                       "<b>%s%%</b>.\n<br>\n<br>\n"
 
-                       "%s*\n<br>\n<br>\n"
+                       "%s.\n<br>\n<br>\n"
                        "The source for this information is %s and was obtained "
                        "on %s.\n<br>\n<br>\n<br>\n<br>\n"
                        "Cheers,\n<br>\n"
@@ -74,7 +87,7 @@ class Mail(object):
                        % (
                        rate,
                        effective_date,
-                       'http://www.wsj.com/mdc/public/page/2_3020-libor.html',
+                       url,
                        updated_at))
 
 
