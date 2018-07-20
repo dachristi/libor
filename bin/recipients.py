@@ -18,7 +18,7 @@ cursor = cnx.cursor(dictionary=True)
 
 class Mail(object):
     '''
-    Object reads recipients from recipients table and combines the email
+    Object reads recipients from `recipients` table and combines the email
     addresses into a comma-seperated string.
     '''
     def __init__(self):
@@ -26,8 +26,10 @@ class Mail(object):
         self.subject = 'LIBOR Rate %s' % str(date.today())
 
     def draft(self):
+        '''
+        Creates an HTML file containing the body of the email to be sent.
+        '''
 
-        # Draft the email
         cmd = '''
                 SELECT rate1month, effective, updated_at
                 FROM rates
@@ -79,7 +81,6 @@ class Mail(object):
                        "on %s.\n<br>\n<br>\n<br>\n<br>\n"
                        "Cheers,\n<br>\n"
                        "Libor Rate Bot\n<br>\n<br>\n<br>\n<br>\n"
-                       #"* Obtained directly from source website.\n\n\n\n"
 
                        "</p>\n"
                        "</body>\n"
@@ -90,14 +91,13 @@ class Mail(object):
                        url,
                        updated_at))
 
-
         with open('/home/libor_rate/bin/email.html', 'w') as f:
             f.write(email_body)
         print '%s Email drafted successfully' % str(datetime.now())
 
     def addresses(self):
         '''
-        Query the active email addresses from the recipients table.
+        Query the active email addresses from the `recipients` table.
         '''
         cmd = '''
                 SELECT email

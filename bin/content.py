@@ -160,7 +160,7 @@ def main():
 
 def data_providers():
     '''
-    Read the `providers` table to obtain eah provider and corresponding url.
+    Read the `providers` table to obtain each provider and corresponding url.
     '''
     cmd = '''
             SELECT id, provider, tag, url
@@ -233,27 +233,3 @@ def processed_files(f):
 
 if __name__ == '__main__':
     sys.exit(main())
-
-
-
-
-'''
-
-
-1. check for files that have not been processed
-2. process each file
-
-
-good_tables = []
-for table in tables:
-    header = table.find('tr', {'class': 'tableheader'})
-    if not header:
-        continue
-    if 'Current interest rates' in header.text:
-        good_tables.append(table)
-        print header
-
-len(good_tables)
-
-
-'''
