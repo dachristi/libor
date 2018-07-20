@@ -49,10 +49,8 @@ class Libor(object):
             effective_date = table_desc[0].text
         else:
             raise Exception('Cannot find the effective date in page')
-            #return (0, 'Cannot find the effective date in page')
         if 'Rates shown are effective' not in effective_date:
             raise Exception('Cannot find the effecive date in parsed object')
-            #return (0, 'Cannot find the effecive date in parsed object')
 
         # Libor Rate
         tables = soup.findAll('table')
@@ -63,15 +61,12 @@ class Libor(object):
         if 'Libor Rates (USD)' in table.text:
             pass
         else:
-            #std.err('Cannot find rate in table')
             raise Exception('Cannot find rate in table')
-            #return (0, 'Cannot find rate in table')
 
         if 'Libor Rates (USD)' in tables[2].findAll('tr')[3].text:
             pass
         else:
             raise Exception('Cannot find rate in rows')
-            #return (0, 'Cannot find rate in rows')
 
         assert('Libor Rates (USD)' in tables[2].findAll('tr')[3].text)
 
@@ -97,7 +92,8 @@ class Libor(object):
                 continue
             if 'Current interest rates' in header.text:
                 rate_tables.append(table)
-        table = rate_tables[-1]  # tables are embedded and the last one represents the inner-most table
+        # tables are embedded and the last one represents the inner-most table
+        table = rate_tables[-1]
 
         rows = table.findAll('tr')
 
@@ -116,7 +112,6 @@ class Libor(object):
 
 class Provider(object):
 
-    #root_dir = '/Users/dc/Documents/projects/libor_project/libor/html_files/'
     root_dir = '/home/libor_rate/html_files/'
 
     def __init__(self, id, provider, tag, url):
@@ -129,7 +124,8 @@ class Provider(object):
     def scrape(self):
         '''
         Simple function to scrape a webpage and store the data as a file.
-        The provider arguement is in object with tag and url attributes expected.
+        The provider arguement is in object with tag and url attributes
+        expected.
         '''
         r = requests.get(self.url)
         date = datetime.now().strftime("%Y%m%d")  # yields YYYYMMDD date format
@@ -202,7 +198,8 @@ def store(data):
     if x:
         files_id = x[0]['id']
     else:
-        raise Exception('Problem storing filename & retrieving corresponding id')
+        raise Exception('Problem storing filename & retrieving corresponding '
+                        'id')
         return 1
 
     cursor.execute(cmd3, (data.provider_id,
@@ -228,7 +225,7 @@ def processed_files(f):
     if x:
         return 1  # file has already been processed
     else:
-        return None  # file has not been processed; ok to process it & store data
+        return None  # file has not been processed; ok to process & store data
 
 
 if __name__ == '__main__':
