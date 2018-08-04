@@ -1,12 +1,11 @@
 # Libor Rate Distribution
 
-These modules accomplish the task of scraping monthly Libor rates on a daily
-basis from online sources, storing the data in a database, and sending a list of
-recipients the data.
+This project looks up the most recently posted (and free) LIBOR value from multiple sources.  The values are stored in a MySQL table and distributed via Gmail.
 
-*libor_online.py - *This module scrapes the Libor rate from online sources and
+Contents of this repository the Python modules and MySQL database schema.
+
+
+*content.py - *This module scrapes the Libor rate from online sources and
 stores the HTML as a file.
 
-*libor_parse.py - *Parses the Libor rate from the HTML file and stores it in a SQL table.
-
-*libor_send.sh - *Sends the Libor rate via email to a list of addresses.
+*recipients.py reads email addresses from the table and distributes the email.
