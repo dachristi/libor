@@ -101,7 +101,7 @@ class Libor(object):
             raise Exception('Cannot find the effective date in page')
         effective_date = ('Rates shown are effective %s'
                           % re.search(r'(\w+\s\d{1,2}\s\d{4})', rows[1].text).group(1).capitalize())
-
+        effective_date = re.sub(r'(^[\w\s]+\w{2})(\s\d{4}$)', r'\1,\2', effective_date)
         if not re.search(r'(\d+\.\d+)', rows[1].text):
             raise Exception('Cannot find the effecive date in parsed object')
         rate = re.search(r'(\d+\.\d+)', rows[1].text).group(1)
